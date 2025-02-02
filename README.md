@@ -147,22 +147,6 @@ Run the test suite:
 npm test
 ```
 
-Run linting:
-```bash
-npm run lint
-```
-
-## Docker Support
-
-Build the container:
-```bash
-docker build -t faq-system .
-```
-
-Run with Docker Compose:
-```bash
-docker-compose up
-```
 
 ## Contributing
 
@@ -183,10 +167,7 @@ Follow conventional commit messages:
 - `style:` Code style changes
 - `chore:` Routine tasks, maintenance
 
-## License
-
-MIT
 
 ## Support
 
-For support, email support@example.com or open an issue in the repository.
+For support, email ayushikatroliya17h@gmail.com or open an issue in the repository.
