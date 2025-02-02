@@ -1,228 +1,194 @@
 # Multilingual FAQ System
 
-A robust Django-based FAQ management system with multilingual support, automatic translation, and caching capabilities.
+A robust FAQ management system built with Node.js, Express, and MongoDB that supports multilingual content with WYSIWYG editing capabilities.
 
-## 📋 Features
+## Features
 
-* Multilingual FAQ management with automatic translation
-* Rich text editing support via CKEditor
-* REST API with language selection
-* Redis-based caching for optimized performance
-* Google Translate API integration
-* Comprehensive admin interface
-* Extensive test coverage
+- Multi-language FAQ management (English, Hindi, Bengali)
+- Rich text editing support using CKEditor
+- Automated translation using Google Translate API
+- Redis-based caching for improved performance
+- RESTful API with language selection
+- Comprehensive test coverage
+- Docker support for easy deployment
 
-## 🚀 Installation
+## Tech Stack
 
-### Prerequisites
+- Backend: Node.js & Express.js
+- Database: MongoDB with Mongoose
+- Cache: Redis
+- Editor: CKEditor integration
+- Translation: Google Translate API
+- Testing: Jest & Supertest
 
-* Python 3.8+
-* Redis Server
-* PostgreSQL
-* Virtual Environment
+## Prerequisites
 
-### Step 1: Clone the Repository
+- Node.js (v16 or higher)
+- MongoDB
+- Redis
+- Google Cloud account (for translation API)
+
+## Installation
+
+1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/multilingual-faq.git
-cd multilingual-faq
+git clone https://github.com/yourusername/multilingual-faq-system.git
+cd multilingual-faq-system
 ```
 
-### Step 2: Set Up Virtual Environment
+2. Install dependencies:
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+npm install
 ```
 
-### Step 3: Install Dependencies
+3. Set up environment variables:
 ```bash
-pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### Step 4: Environment Configuration
-Create a `.env` file in the project root:
-```env
-DEBUG=True
-SECRET_KEY=your-secret-key
-DATABASE_URL=postgres://user:password@localhost:5432/faq_db
-REDIS_URL=redis://localhost:6379/1
-GOOGLE_TRANSLATE_API_KEY=your-google-translate-api-key
+Configure the following variables in `.env`:
+```
+MONGODB_URI=mongodb://localhost:27017/faq_system
+REDIS_URL=redis://localhost:6379
+GOOGLE_TRANSLATE_API_KEY=your_api_key
+PORT=3000
 ```
 
-### Step 5: Database Setup
+4. Start the development server:
 ```bash
-python manage.py migrate
-python manage.py createsuperuser
+npm run dev
 ```
 
-### Step 6: Start Redis Server
-```bash
-redis-server
+## Project Structure
+
+```
+.
+├── src/
+│   ├── config/
+│   │   ├── database.js
+│   │   └── redis.js
+│   ├── models/
+│   │   └── Faq.js
+│   ├── controllers/
+│   │   └── faqController.js
+│   ├── middleware/
+│   │   ├── cache.js
+│   │   └── translate.js
+│   ├── routes/
+│   │   └── api.js
+│   └── utils/
+│       └── translator.js
+├── tests/
+│   └── faq.test.js
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
 ```
 
-### Step 7: Run Development Server
-```bash
-python manage.py runserver
-```
-
-## 📖 API Documentation
-
-### Base URL
-```
-http://localhost:8000/api/v1/
-```
-
-### Authentication
-All API endpoints require JWT authentication. Include the token in the Authorization header:
-```
-Authorization: Bearer <your_jwt_token>
-```
+## API Documentation
 
 ### Endpoints
 
-#### 1. List FAQs
-```http
-GET /api/v1/faqs/
+#### Get FAQs
+```
+GET /api/faqs
 ```
 
 Query Parameters:
-* `lang`: Language code (e.g., 'en', 'hi', 'bn')
-* `page`: Page number for pagination
-* `page_size`: Number of items per page
+- `lang`: Language code (en, hi, bn) [default: en]
 
 Response:
 ```json
 {
-    "count": 100,
-    "next": "http://localhost:8000/api/v1/faqs/?page=2",
-    "previous": null,
-    "results": [
-        {
-            "id": 1,
-            "question": "What is this service?",
-            "answer": "<p>This is a multilingual FAQ system...</p>",
-            "created_at": "2024-02-02T10:00:00Z"
-        }
-    ]
+  "success": true,
+  "data": [
+    {
+      "id": "123",
+      "question": "How do I reset my password?",
+      "answer": "<p>Follow these steps...</p>",
+      "language": "en"
+    }
+  ]
 }
 ```
 
-#### 2. Create FAQ
-```http
-POST /api/v1/faqs/
+#### Create FAQ
 ```
+POST /api/faqs
+```
+
 Request Body:
 ```json
 {
-    "question": "What is this service?",
-    "answer": "<p>This is a multilingual FAQ system...</p>"
+  "question": "How do I reset my password?",
+  "answer": "<p>Follow these steps...</p>",
+  "language": "en"
 }
 ```
 
-#### 3. Update FAQ
-```http
-PUT /api/v1/faqs/{id}/
-```
+### Error Handling
 
-#### 4. Delete FAQ
-```http
-DELETE /api/v1/faqs/{id}/
-```
+The API uses standard HTTP status codes:
+- 200: Success
+- 400: Bad Request
+- 404: Not Found
+- 500: Server Error
 
-## 🔧 Configuration
+## Caching Strategy
 
-### Redis Cache Settings
-In `settings.py`:
-```python
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env('REDIS_URL'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-```
+The system implements a two-level caching strategy:
+1. In-memory Redis cache for frequently accessed FAQs
+2. Database query caching for optimized performance
 
-### CKEditor Configuration
-```python
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'height': 300,
-        'width': 800,
-    },
-}
-```
+Cache keys are structured as: `faq:{id}:{language}`
 
-## 🧪 Running Tests
+## Testing
+
+Run the test suite:
 ```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=.
-
-# Run specific test file
-pytest tests/test_models.py
+npm test
 ```
 
-## 🤝 Contributing
+Run linting:
+```bash
+npm run lint
+```
 
-### Setting Up Development Environment
+## Docker Support
+
+Build the container:
+```bash
+docker build -t faq-system .
+```
+
+Run with Docker Compose:
+```bash
+docker-compose up
+```
+
+## Contributing
 
 1. Fork the repository
-2. Create a new branch for your feature:
-```bash
-git checkout -b feature/your-feature-name
-```
-3. Make your changes
-4. Run tests
-5. Submit a pull request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### Commit Message Convention
-Follow conventional commits:
+## Git Commit Guidelines
 
-* `feat`: New feature
-* `fix`: Bug fix
-* `docs`: Documentation changes
-* `test`: Adding or modifying tests
-* `refactor`: Code refactoring
-* `style`: Code style changes
-* `chore`: Maintenance tasks
+Follow conventional commit messages:
+- `feat:` New features
+- `fix:` Bug fixes
+- `docs:` Documentation changes
+- `test:` Adding or modifying tests
+- `refactor:` Code refactoring
+- `style:` Code style changes
+- `chore:` Routine tasks, maintenance
 
-### Code Style
+## License
 
-* Follow PEP 8 guidelines
-* Use flake8 for linting
-* Add docstrings to all functions and classes
-* Keep functions focused and single-purpose
-* Write descriptive variable names
+MIT
 
-### Pull Request Process
+## Support
 
-1. Update documentation if needed
-2. Add tests for new features
-3. Ensure all tests pass
-4. Update the CHANGELOG.md
-5. Get at least one code review
-
-## 📝 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆘 Support
-For support, please:
-
-* Check the FAQ section in the Wiki
-* Open an issue
-* Contact the maintainers at support@example.com
-
-## 🙏 Acknowledgments
-
-* Django REST Framework
-* Google Translate API
-* Redis
-* CKEditor
-
-## 📊 Project Status
-Active development - Contributions welcome!
+For support, email support@example.com or open an issue in the repository.
