@@ -62,27 +62,25 @@ npm run dev
 ## Project Structure
 
 ```
-.
-├── src/
-│   ├── config/
-│   │   ├── database.js
-│   │   └── redis.js
-│   ├── models/
-│   │   └── Faq.js
-│   ├── controllers/
-│   │   └── faqController.js
-│   ├── middleware/
-│   │   ├── cache.js
-│   │   └── translate.js
-│   ├── routes/
-│   │   └── api.js
-│   └── utils/
-│       └── translator.js
+├── config/
+│   └── db.js                 # Database configuration
+├── controllers/
+│   └── faqController.js      # FAQ CRUD operations
+├── middleware/
+│   └── redis.js              # Redis caching middleware
+├── models/
+│   └── faq.js               # FAQ MongoDB model
+├── routes/
+│   └── faqRoutes.js         # API routes
+├── services/
+│   └── translationServices.js # Translation service
 ├── tests/
-│   └── faq.test.js
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
+│   └── faq.test.js          # FAQ testing suite
+├── .env                      # Environment variables
+├── app.js                    # Express app configuration
+├── package.json             
+├── package-lock.json
+└── server.js                # Server entry point
 ```
 
 ## API Documentation
