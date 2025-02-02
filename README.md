@@ -32,8 +32,7 @@ A robust FAQ management system built with Node.js, Express, and MongoDB that sup
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/multilingual-faq-system.git
-cd multilingual-faq-system
+git clone https://github.com/Ayushi1222/FAQ-Management-System--BharatFD-Backend.git
 ```
 
 2. Install dependencies:
