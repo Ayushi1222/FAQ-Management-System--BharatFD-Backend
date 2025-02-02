@@ -1,0 +1,38 @@
+{
+  "name": "faq-management-system--bharatfd-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/translate": "^8.5.0",
+    "body-parser": "^1.20.3",
+    "ckeditor4-react": "^5.2.0",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "google-translate-api": "^2.3.0",
+    "helmet": "^8.0.0",
+    "install": "^0.13.0",
+    "ioredis": "^5.4.2",
+    "mongoose": "^8.9.6",
+    "node-fetch": "^3.3.2",
+    "npm": "^10.9.2",
+    "redis": "^4.7.0",
+    "sanitize-html": "^2.14.0"
+  },
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "eslint": "^9.19.0",
+    "mocha": "^11.1.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
+}
